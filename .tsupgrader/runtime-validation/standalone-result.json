@@ -1,0 +1,60 @@
+{
+  "planHash": "0cab0d4f0a944d8df4eee99dcd04f29636fd6526c67a0b4669b814556cb91684",
+  "phase": "standalone",
+  "recordedAtUtc": "2026-11-13T19:20:25.7860202Z",
+  "retryCount": 0,
+  "resetBaseline": false,
+  "complete": true,
+  "result": {
+    "setupSucceeded": true,
+    "setupDurationMs": 1455,
+    "setupFailureOutput": null,
+    "assertions": [
+      {
+        "name": "tests-pass",
+        "kind": "process",
+        "verificationMethod": "test-results",
+        "passed": false,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 1,
+        "outputSample": "\r\n\u003E playwright-fintech-e2e-framework@1.0.0 test\r\n\u003E playwright test\r\n\r\n\u25C7 injected env (2) from .env\r\n\r\nRunning 3 tests using 3 workers\r\n\r\n\u25C7 injected env (0) from .env\r\n\u25C7 injected env (0) from .env\r\n\u25C7 injected env (0) from .env\r\n  x  1 [Chromium] \u203A src\\tests\\bankingE2E.spec.ts:7:3 \u203A ParaBank E2E - Core Customer Banking Lifecycle \u203A Milestone 1: Customer Onboarding, Logout, and Fresh Authentication (16.8s)\r\n  x  2 [WebKit] \u203A src\\tests\\bankingE2E.spec.ts:7:3 \u203A ParaBank E2E - Core Customer Banking Lifecycle \u203A Milestone 1: Customer Onboarding, Logout, and Fresh Authentication (18.1s)\r\n  x  3 [Firefox] \u203A src\\tests\\bankingE2E.spec.ts:7:3 \u203A ParaBank E2E - Core Customer Banking Lifecycle \u203A Milestone 1: Customer Onboarding, Logout, and Fresh Authentication (18.4s)\r\n\r\n\r\n  1) [Chromium] \u203A src\\tests\\bankingE2E.spec.ts:7:3 \u203A ParaBank E2E - Core Customer Banking Lifecycle \u203A Milestone 1: Customer Onboarding, Logout, and Fresh Authentication \u203A Navigate to ParaBank portal and register new customer \r\n\r\n    TimeoutError: locator.click: Timeout 15000ms exceeded.\r\n    Call log:\r\n      - waiting for getByRole(\u0027link\u0027, { name: \u0027Register\u0027 })\r\n\r\n\r\n       at ..\\pages\\BankAuthPage.ts:52\r\n\r\n      50 |\r\n      51 |   async registerNewCustomer(customer: CustomerProfile, password: string): Promise\u003Cvoid\u003E {\r\n    \u003E 52 |     await this.registerLink.click();\r\n         |                             ^\r\n      53 |     await this.firstNameInput.fill(customer.firstName);\r\n      54 |     await this.lastNameInput.fill(customer.lastName);\r\n      55 |     await this.addressInput.fill(customer.address);\r\n        at BankAuthPage.registerNewCustomer (C:\\Dulini\\Studies\\playwright-fintech-e2e-framework\\src\\pages\\BankAuthPage.ts:52:29)\r\n        at C:\\Dulini\\Studies\\playwright-fintech-e2e-framework\\src\\tests\\bankingE2E.spec.ts:13:26\r\n        at C:\\Dulini\\Studies\\playwright-fintech-e2e-framework\\src\\tests\\bankingE2E.spec.ts:11:5\r\n\r\n    attachment #1: screenshot (image/png) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\r\n    test-results\\bankingE2E-ParaBank-E2E----7d5f9-ut-and-Fresh-Authentication-Chromium\\test-failed-1.png\r\n    \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\r\n\r\n    attachment #2: video (video/webm) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\r\n    test-results\\bankingE2E-ParaBank-E2E----7d5f9-ut-and-Fresh-Authentication-Chromium\\video.webm\r\n    \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\r\n\r\n    Error Context: test-results\\bankingE2E-ParaBank-E2E----7d5f9-ut-and-Fresh-Authentication-Chromium\\error-context.md\r\n\r\n  2) [Firefox] \u203A src\\tests\\bankingE2E.spec.ts:7:3 \u203A ParaBank E2E - Core Customer Banking Lifecycle \u203A Milestone 1: Customer Onboarding, Logout, and Fresh Authentication \u203A Navigate to ParaBank portal and register new customer \r\n\r\n    TimeoutError: locator.click: Timeout 15000ms exceeded.\r\n    Call log:\r\n      - waiting for getByRole(\u0027link\u0027, { name: \u0027Register\u0027 })\r\n\r\n\r\n       at ..\\pages\\BankAuthPage.ts:52\r\n\r\n      50 |\r\n      51 |   async registerNewCustomer(customer: CustomerProfile, password: string): Promise\u003Cvoid\u003E {\r\n    \u003E 52 |     await this.registerLink.click();\r\n         |                             ^\r\n      53 |     await this.firstNameInput.fill(customer.firstName);\r\n      54 |     await this.lastNameInput.fill(customer.lastName);\r\n      55 |     await this.addressInput.fill(customer.address);\r\n        at BankAuthPage.registerNewCustomer (C:\\Dulini\\Studies\\playwright-fintech-e2e-framework\\src\\pages\\BankAuthPage.ts:52:29)\r\n        at C:\\Dulini\\Studies\\playwright-fintech-e2e-framework\\src\\tests\\bankingE2E.spec.ts:13:26\r\n        at C:\\Dulini\\Studies\\playwright-fintech-e2e-framework\\src\\tests\\bankingE2E.spec.ts:11:5\r\n\r\n    attachment #1: screenshot (image/png) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\r\n    test-results\\bankingE2E-ParaBank-E2E----7d5f9-ut-and-Fresh-Authentication-Firefox\\test-failed-1.png\r\n    \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\r\n\r\n\u2026[truncated]",
+        "durationMs": 20704,
+        "testResults": {
+          "testFramework": "unknown",
+          "runnerDetectedFrom": "none",
+          "testsTotal": 0,
+          "testsPassed": 0,
+          "testsFailed": 0,
+          "testsSkipped": 0,
+          "parseFailed": true
+        }
+      }
+    ],
+    "executions": [
+      {
+        "source": "setup[0]",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.CMD",
+        "args": [
+          "ci"
+        ],
+        "cwd": "C:\\Dulini\\Studies\\playwright-fintech-e2e-framework",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      },
+      {
+        "source": "tests-pass",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.CMD",
+        "args": [
+          "test"
+        ],
+        "cwd": "C:\\Dulini\\Studies\\playwright-fintech-e2e-framework",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      }
+    ]
+  }
+}
