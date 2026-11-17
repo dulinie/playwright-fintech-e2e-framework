@@ -20,7 +20,7 @@ export class TransferFundsPage extends BasePage {
     this.amountInput = page.locator('#amount');
     this.fromAccountDropdown = page.locator('#fromAccountId');
     this.toAccountDropdown = page.locator('#toAccountId');
-    this.transferButton = page.getByRole('button', { name: 'Transfer', exact: true });
+    this.transferButton = page.getByRole('button', { name: 'Send Transfer', exact: true });
     this.resultPanel = page.locator('#showResult');
     this.errorPanel = page.locator('#showError');
     this.confirmationHeader = page.locator('#showResult h1.title');
