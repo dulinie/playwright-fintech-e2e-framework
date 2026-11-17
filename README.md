@@ -2,50 +2,55 @@
 ![Playwright E2E](https://github.com/dulinie/playwright-fintech-e2e-framework/actions/workflows/playwright.yml/badge.svg)
 
 
-This follows patterns used in enterprise frameworks,, scalable Quality Engineering framework built using **Playwright** and **TypeScript**. Engineered around the **Page Object Model (POM)** with custom dependency-injected fixtures, strict TypeScript path aliases, and resilient network interception (`page.route`) to validate end-to-end digital banking workflows.
+A scalable Quality Engineering framework built with **Playwright** and **TypeScript**, following patterns used in enterprise test frameworks. It uses the **Page Object Model (POM)**, custom fixtures, API-driven test setup and network interception (`page.route`) to test digital banking workflows on the [ParaBank](https://parabank.parasoft.com/parabank/index.htm) demo bank.
 
-## 🎯 End-to-End Business Flow Coverage
-The test suite models a complete, stateful customer banking lifecycle (`src/tests/bankingE2E.spec.ts`):
-1. **Customer Onboarding & Authentication:** Generates unique (`crypto.randomUUID`) customer profiles to prevent parallel execution collisions, registers a new account, and validates session logout/login.
-2. **Account Lifecycle Management:** Extracts the dynamically assigned Checking Account ID from the DOM, opens a new **Savings Account**, and validates multi-account visibility.
-3. **Internal Liquidity & Ledger Reconciliation:** Transfers funds between dynamic Checking and Savings accounts and validates exact mathematical debit/credit balance updates.
-4. **External Payment Processing (API Mocking):** Uses Playwright's `page.route()` to intercept the `/services_proxy/bank/billpay` request and return a stubbed response, so the test doesn't depend on the demo site's payment service. It verifies how the Bill Pay page displays the confirmation. Because the call is mocked, the payment itself is not verified against the real backend.
-5. **Transaction Audit Trail:** Queries the backend transaction ledger via **Find Transactions** to reconcile debit entries and transaction descriptions.
+## 🎯 Test Coverage
+`src/tests/bankingE2E.spec.ts` contains five independent tests that run in parallel. Each one creates its own customer, so they never share state:
+
+1. **Registration & authentication:** Registers a customer through the UI with a unique (`crypto.randomUUID`) username, then logs out and back in with the new credentials.
+2. **Opening a savings account:** Opens a savings account funded from checking and checks that both accounts appear in the Accounts Overview.
+3. **Fund transfer & balance reconciliation:** Transfers funds from checking to savings and checks that both balances change by the exact amount.
+4. **Transaction search:** Searches transactions by amount and checks for exactly one "Funds Transfer Sent" row with the right debit.
+5. **Bill pay with a mocked backend:** The demo site's bill-pay service is unreliable, so `page.route()` intercepts the `/services_proxy/bank/billpay` call and returns a stubbed response. The test checks the request the UI sends (account, amount and full payee details) and how the confirmation is shown. Because the call is mocked, the real ledger is not checked.
 
 ## 🏗️ Architectural Highlights
-* **Custom Dependency Injection (`src/fixtures/base.fixture.ts`):** Injects Page Objects directly into test specs via Playwright's `test.extend()`, eliminating boilerplate instantiation.
-* **Inheritance & Encapsulation (`src/pages/BasePage.ts`):** Centralizes shared navigation and wait behaviors across all domain Page Objects.
-* **Strict TypeScript & Path Aliases (`tsconfig.json`):** Enforces strict type safety and clean modular imports (`@pages/*`, `@fixtures/*`, `@utils/*`, `@data/*`, `@config/*`).
-* **Cross-Browser Parallel Execution:** Configured to run concurrently across headless **Chromium**, **Firefox**, and **WebKit** engines.
-* **Automated CI/CD Pipeline:** Integrated with **GitHub Actions** (`.github/workflows/playwright.yml`) to execute cross-browser suites on every push/PR and publish downloadable HTML quality reports as build artifacts.
+* **API-driven test setup (`src/api/ParaBankApi.ts`):** Tests 2–5 create their customer, accounts and transfers through ParaBank's HTTP endpoints rather than the UI. Setup is faster and more stable, and each test uses the UI only for the feature it checks. The client uses `page.request`, which shares cookies with the browser, so after setup the page is already logged in.
+* **Custom fixtures (`src/fixtures/base.fixture.ts`):** `test.extend()` provides the Page Objects, the API client and a ready-to-use `customer` (registered, logged in, with a known checking account ID) to each test.
+* **Page Object Model (`src/pages/`):** One class per page, extending a shared `BasePage`. Forms wait for either their result panel or their error panel, so a failure shows ParaBank's own error message instead of a timeout.
+* **Resilient assertions:** Assertions retry until they pass (Playwright's web-first `expect` and `expect.poll`), and locators prefer accessible roles (`getByRole`).
+* **Strict TypeScript & path aliases (`tsconfig.json`):** Strict type-checking (`npm run typecheck`) and clean imports (`@api/*`, `@pages/*`, `@fixtures/*`, `@utils/*`, `@data/*`, `@config/*`).
+* **Cross-browser projects:** Configured for **Chromium**, **Firefox** and **WebKit**, with traces, screenshots and video kept on failure.
+* **CI/CD pipeline (`.github/workflows/playwright.yml`):** GitHub Actions runs a type-check and the suite on every push and pull request to `main`, and publishes the HTML report as a build artifact. CI runs on Chromium only, to stay within the public demo site's rate limit; all three browsers can be run locally.
 
 ## 📂 Project Structure
 ```text
 playwright-fintech-e2e-framework/
 ├── .github/workflows/
-│   └── playwright.yml              # GitHub Actions CI/CD workflow
+│   └── playwright.yml              # GitHub Actions CI workflow
 ├── src/
+│   ├── api/
+│   │   └── ParaBankApi.ts          # HTTP client for fast test setup
 │   ├── config/
-│   │   └── env.config.ts           # Typed environment variable loader
+│   │   └── env.config.ts           # Environment variable loader
 │   ├── fixtures/
-│   │   └── base.fixture.ts         # Custom Page Object dependency injection
+│   │   └── base.fixture.ts         # Page Objects, API client & customer fixtures
 │   ├── pages/
-│   │   ├── BasePage.ts             # Parent Page Object class
-│   │   ├── BankAuthPage.ts         # Registration & session authentication
-│   │   ├── AccountsOverviewPage.ts # Account ID extraction & balance parsing
-│   │   ├── OpenAccountPage.ts      # Savings account creation
+│   │   ├── BasePage.ts             # Shared navigation & result/error handling
+│   │   ├── BankAuthPage.ts         # Registration, login & logout
+│   │   ├── AccountsOverviewPage.ts # Account rows & balance parsing
+│   │   ├── OpenAccountPage.ts      # Opening new accounts
 │   │   ├── TransferFundsPage.ts    # Internal fund transfers
-│   │   ├── BillPayPage.ts          # External utility payments
-│   │   └── FindTransactionsPage.ts # Ledger search & audit verification
+│   │   ├── BillPayPage.ts          # Bill payments
+│   │   └── FindTransactionsPage.ts # Transaction search
 │   ├── test-data/
-│   │   └── bankingData.ts          # Strongly typed payee & transaction constants
+│   │   └── bankingData.ts          # Typed payee & amount constants
 │   ├── tests/
-│   │   └── bankingE2E.spec.ts      # 5-milestone E2E customer journey
+│   │   └── bankingE2E.spec.ts      # Five independent banking tests
 │   └── utils/
-│       └── dataGenerator.ts        # Dynamic UUID customer profile generator
+│       └── dataGenerator.ts        # Unique customer profile generator
 ├── .env.example                    # Environment variable template
-├── playwright.config.ts            # Global cross-browser & trace configuration
-└── tsconfig.json                   # Strict TypeScript compiler & alias rules
+├── playwright.config.ts            # Browsers, timeouts & reporting
+└── tsconfig.json                   # Strict TypeScript & path aliases
 ```
 
 ## 🛠️ Local Setup & Execution
@@ -55,13 +60,20 @@ playwright-fintech-e2e-framework/
    npm install
    npx playwright install
    ```
-2. **Configure environment variables:**
-   Copy `.env.example` to `.env` and adjust values if needed.
-3. **Run cross-browser tests:**
+2. **Configure environment variables (optional):**
+   Copy `.env.example` to `.env` and adjust the values if needed. Without a `.env`, the defaults in `src/config/env.config.ts` are used.
+3. **Type-check:**
    ```bash
-   npx playwright test
+   npm run typecheck
    ```
-4. **View interactive HTML report:**
+4. **Run the tests:**
+   ```bash
+   npx playwright test                     # all three browsers
+   npx playwright test --project=Chromium  # Chromium only, as in CI
+   ```
+5. **View the HTML report:**
    ```bash
    npx playwright show-report
    ```
+
+> **Note:** ParaBank is a shared public demo site and rate-limits heavy use. If tests fail with HTTP 429 or a Cloudflare "Error 1015" page, wait a few minutes and run again.
