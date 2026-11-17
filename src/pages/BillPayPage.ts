@@ -15,7 +15,8 @@ export class BillPayPage extends BasePage {
   private readonly amountInput: Locator;
   private readonly fromAccountDropdown: Locator;
   private readonly sendPaymentButton: Locator;
-  private readonly confirmationResult: Locator;
+  private readonly resultPanel: Locator;
+  private readonly errorPanel: Locator;
   public readonly confirmationHeader: Locator;
   public readonly payeeNameResult: Locator;
   public readonly amountResult: Locator;
@@ -34,8 +35,9 @@ export class BillPayPage extends BasePage {
     this.verifyAccountInput = page.locator('input[name="verifyAccount"]');
     this.amountInput = page.locator('input[name="amount"]');
     this.fromAccountDropdown = page.locator('select[name="fromAccountId"]');
-    this.sendPaymentButton = page.locator('input[value="Send Payment"]');
-    this.confirmationResult = page.locator('#billpayResult');
+    this.sendPaymentButton = page.getByRole('button', { name: 'Send Payment' });
+    this.resultPanel = page.locator('#billpayResult');
+    this.errorPanel = page.locator('#billpayError');
     this.confirmationHeader = page.locator('#billpayResult h1.title');
     this.payeeNameResult = page.locator('#payeeName');
     this.amountResult = page.locator('#amount');
@@ -62,6 +64,6 @@ export class BillPayPage extends BasePage {
       .waitFor({ state: 'attached' });
     await this.fromAccountDropdown.selectOption(fromAccountId);
     await this.sendPaymentButton.click();
-    await this.confirmationResult.waitFor({ state: 'visible' });
+    await this.waitForResultOrError(this.resultPanel, this.errorPanel, 'Bill payment');
   }
 }

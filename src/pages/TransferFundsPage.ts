@@ -7,6 +7,8 @@ export class TransferFundsPage extends BasePage {
   private readonly fromAccountDropdown: Locator;
   private readonly toAccountDropdown: Locator;
   private readonly transferButton: Locator;
+  private readonly resultPanel: Locator;
+  private readonly errorPanel: Locator;
   public readonly confirmationHeader: Locator;
   public readonly amountResult: Locator;
   public readonly fromAccountIdResult: Locator;
@@ -18,7 +20,9 @@ export class TransferFundsPage extends BasePage {
     this.amountInput = page.locator('#amount');
     this.fromAccountDropdown = page.locator('#fromAccountId');
     this.toAccountDropdown = page.locator('#toAccountId');
-    this.transferButton = page.locator('input[value="Transfer"]');
+    this.transferButton = page.getByRole('button', { name: 'Transfer', exact: true });
+    this.resultPanel = page.locator('#showResult');
+    this.errorPanel = page.locator('#showError');
     this.confirmationHeader = page.locator('#showResult h1.title');
     this.amountResult = page.locator('#amountResult');
     this.fromAccountIdResult = page.locator('#fromAccountIdResult');
@@ -41,6 +45,6 @@ export class TransferFundsPage extends BasePage {
     await this.fromAccountDropdown.selectOption(fromAccountId);
     await this.toAccountDropdown.selectOption(toAccountId);
     await this.transferButton.click();
-    await this.confirmationHeader.waitFor({ state: 'visible' });
+    await this.waitForResultOrError(this.resultPanel, this.errorPanel, 'Transfer');
   }
 }

@@ -31,16 +31,17 @@ export class AccountsOverviewPage extends BasePage {
     return accountId.trim();
   }
 
-  async verifyAccountExistsInTable(accountId: string): Promise<Locator> {
+  /** The table row for an account. Use with web-first assertions, e.g. `toBeVisible()`. */
+  accountRow(accountId: string): Locator {
     return this.accountsSummaryTable
-      .getByRole('link', { name: accountId, exact: true })
-      .locator('xpath=ancestor::tr');
+      .locator('tbody tr')
+      .filter({ has: this.page.getByRole('link', { name: accountId, exact: true }) });
   }
 
   async getAccountBalance(accountId: string): Promise<number> {
-    const accountRow = await this.verifyAccountExistsInTable(accountId);
+    const accountRow = this.accountRow(accountId);
     await accountRow.waitFor({ state: 'visible' });
-    const balanceText = await accountRow.locator('td:nth-child(2)').textContent();
+    const balanceText = await accountRow.locator('td').nth(1).textContent();
 
     if (balanceText === null) {
       throw new Error(`Account ${accountId} did not have a balance`);

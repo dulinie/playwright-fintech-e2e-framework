@@ -19,3 +19,5 @@ export const UTILITY_PAYEE: PayeeDetails = {
 };
 
 export const BILL_PAYMENT_AMOUNT = '75.00';
+
+export const TRANSFER_AMOUNT = '150.00';
