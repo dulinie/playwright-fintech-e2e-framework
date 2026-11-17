@@ -3,6 +3,8 @@ import { EnvConfig } from './src/config/env.config';
 
 export default defineConfig({
   testDir: './src/tests',
+  // The agents' seed test is a local starting point only; don't run it in CI.
+  testIgnore: process.env.CI ? ['**/seed.spec.ts'] : [],
   // The full customer journey runs ~10 steps against a slow public sandbox.
   timeout: 120_000,
   expect: { timeout: 10_000 },
