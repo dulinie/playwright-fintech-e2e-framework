@@ -76,4 +76,9 @@ playwright-fintech-e2e-framework/
    npx playwright show-report
    ```
 
-> **Note:** ParaBank is a shared public demo site and rate-limits heavy use. If tests fail with HTTP 429 or a Cloudflare "Error 1015" page, wait a few minutes and run again.
+> **Note:** ParaBank is a shared public demo site and rate-limits heavy use. If tests fail with HTTP 429 or a Cloudflare "Error 1015" ("You are being rate limited") page, wait a few minutes, then run a single browser with one worker so requests go out one test at a time:
+>
+> ```bash
+> npx playwright test --project=chromium --workers=1
+> ```
+
