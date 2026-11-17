@@ -1,13 +1,15 @@
 # 🏦 Playwright Fintech E2E Automation Framework
+![Playwright E2E](https://github.com/dulinie/playwright-fintech-e2e-framework/actions/workflows/playwright.yml/badge.svg)
 
-An enterprise-grade, scalable Quality Engineering framework built using **Playwright** and **TypeScript**. Engineered around the **Page Object Model (POM)** with custom dependency-injected fixtures, strict TypeScript path aliases, and resilient network interception (`page.route`) to validate end-to-end digital banking workflows.
+
+This follows patterns used in enterprise frameworks,, scalable Quality Engineering framework built using **Playwright** and **TypeScript**. Engineered around the **Page Object Model (POM)** with custom dependency-injected fixtures, strict TypeScript path aliases, and resilient network interception (`page.route`) to validate end-to-end digital banking workflows.
 
 ## 🎯 End-to-End Business Flow Coverage
 The test suite models a complete, stateful customer banking lifecycle (`src/tests/bankingE2E.spec.ts`):
-1. **Customer Onboarding & Authentication:** Generates cryptographically unique (`crypto.randomUUID`) customer profiles to prevent parallel execution collisions, registers a new account, and validates session logout/login.
+1. **Customer Onboarding & Authentication:** Generates unique (`crypto.randomUUID`) customer profiles to prevent parallel execution collisions, registers a new account, and validates session logout/login.
 2. **Account Lifecycle Management:** Extracts the dynamically assigned Checking Account ID from the DOM, opens a new **Savings Account**, and validates multi-account visibility.
 3. **Internal Liquidity & Ledger Reconciliation:** Transfers funds between dynamic Checking and Savings accounts and validates exact mathematical debit/credit balance updates.
-4. **External Payment Processing (API Mocking):** Uses Playwright's native `page.route()` network interception to stub `/services_proxy/bank/billpay`, isolating third-party sandbox instability while deterministically verifying Bill Pay UI confirmation states.
+4. **External Payment Processing (API Mocking):** Uses Playwright's `page.route()` to intercept the `/services_proxy/bank/billpay` request and return a stubbed response, so the test doesn't depend on the demo site's payment service. It verifies how the Bill Pay page displays the confirmation. Because the call is mocked, the payment itself is not verified against the real backend.
 5. **Transaction Audit Trail:** Queries the backend transaction ledger via **Find Transactions** to reconcile debit entries and transaction descriptions.
 
 ## 🏗️ Architectural Highlights
